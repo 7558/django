@@ -1,11 +1,15 @@
 from django.shortcuts import render
+from .models import ProductCategory, Product
 
 
 def index(request):
-    context = {
-        'title': 'Главная'
-    }
-    return render(request, 'mainapp/index.html', context)
+    title = 'главная'
+
+    products = Product.objects.all()[:4]
+
+    content = {'title': title, 'products': products}
+
+    return render(request, 'mainapp/index.html',  content)
 
 
 def contact(request):
@@ -15,71 +19,10 @@ def contact(request):
     return render(request, 'mainapp/contact.html', context)
 
 
-links_menu = [
-    {
-        'url': 'products',
-        'title': 'Все'
-    },
-    {
-        'url': 'products_home',
-        'title': 'Дом'
-    },
-    {
-        'url': 'products_office',
-        'title': 'Офис'
-    },
-    {
-        'url': 'products_modern',
-        'title': 'Модерн'
-    },
-    {
-        'url': 'products_classic',
-        'title': 'Классика'
-    },
-
-]
-
-
-def products(request):
+def products(request, pk=None):
     context = {
-        "links_menu": links_menu,
+        "links_menu": ProductCategory.objects.all(),
         'title': 'Продукты'
-
-    }
-    return render(request, 'mainapp/products.html', context=context)
-
-
-def products_home(request):
-    context = {
-        "links_menu": links_menu,
-        'title': 'Продукты для дома'
-
-    }
-    return render(request, 'mainapp/products.html', context=context)
-
-
-def products_office(request):
-    context = {
-        "links_menu": links_menu,
-        'title': 'Продкуты для офиса'
-
-    }
-    return render(request, 'mainapp/products.html', context=context)
-
-
-def products_modern(request):
-    context = {
-        "links_menu": links_menu,
-        'title': 'Продукты Модерн'
-
-    }
-    return render(request, 'mainapp/products.html', context=context)
-
-
-def products_classic(request):
-    context = {
-        "links_menu": links_menu,
-        'title': 'Продкуты классика'
 
     }
     return render(request, 'mainapp/products.html', context=context)
