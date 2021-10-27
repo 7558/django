@@ -1,0 +1,18 @@
+{% extends 'authapp/base.html' %}
+{% load static %}
+
+{% block text-center %}
+<div class="h2 text-center head">
+    Редактирование профиля
+</div>
+{% endblock %}
+
+{% block content %}
+    <form class="form-horizontal" action="{% url 'auth:edit' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ edit_form.as_p }}
+        <input class="form-control" type="submit" value="Сохранить">
+        <br>
+        <img src="/media/{{ user.avatar }}", height="150", width="150">
+    </form>
+{% endblock %}
