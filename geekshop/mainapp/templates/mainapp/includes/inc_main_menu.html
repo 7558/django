@@ -1,4 +1,8 @@
-<li><a href="{% url 'index' %}" {% if request.resolver_match.url_name == 'index' %}class="active" {% endif %}>домой</a></li>
+<li>
+    <a href="{% url 'index' %}" {% if request.resolver_match.url_name == 'index' %}
+    class="active" {% endif %}>домой
+    </a>
+</li>
 <li>
     <a href="{% url 'products:products' %}"
        {% if request.resolver_match.namespace == 'products' %}class="active" {% endif %}>
@@ -15,3 +19,9 @@
         <li><a href="{% url 'auth:login' %}">войти</a></li>
     {% endif %}
 </li>
+        <a href="#" class="search"></a>
+        <a href="{% url 'basket:view' %}" class="basket">
+            <span>
+                {% if basket %} {{ basket|length }} {% endif %}
+            </span>
+        </a>
