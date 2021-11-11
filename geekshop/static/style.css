@@ -82,12 +82,17 @@ html, body {
 }
 .basket {
 	display: block;
-	width: 23px;
+	width: 100px;
 	height: 23px;	
 	background-image: url(img/basket.png);
 	position: absolute;
 	top: 63px;
 	left: 1210px;
+	text-decoration: none;
+	color: #555555;
+	padding-left: 27px;
+	background-repeat: no-repeat;
+	font-size: 12px;
 }
 
 .clearfix:after {
@@ -547,7 +552,7 @@ html, body {
 	background-color: #f7f7f7;
 	padding-left: 99px;
 	padding-right: 98px;
-	margin: -384px auto 0;
+	/*margin: -384px auto 0;*/
 	clear: both;
 }
 .footer form {
