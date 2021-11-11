@@ -11,14 +11,26 @@
 </li>
 <li><a href="{% url 'contact' %}" {% if request.resolver_match.url_name == 'contact' %}class="active" {% endif %}>контакты</a></li>
 <li>
+  {% if user.is_authenticated %}
+    <li>
+      <a href="{% url 'auth:edit' %}">
+        {{ user.first_name|default:'Пользователь' }}
+      </a>
+    </li>
+  {% endif %}
+  {% if user.is_superuser %}
+    <li>
+      <a href="{% url 'adminapp:user_list' %}">админка</a>
+    </li>
+  {% endif %}
+  <li>
     {% if user.is_authenticated %}
-        <li><a href="{% url 'auth:edit' %}">{{ user.first_name|default:'Пользователь' }}</a></li>
-        <li><a href="{% url 'auth:logout' %}">выйти</a></li>
+      <a href="{% url 'auth:logout' %}">выйти</a>
     {% else %}
-        <li><a href="{% url 'auth:register' %}">Регистрация</a></li>
-        <li><a href="{% url 'auth:login' %}">войти</a></li>
+      <a href="{% url 'auth:login' %}">войти</a>
     {% endif %}
-</li>
+  </li>
+
 <!--<a href="#" class="search"></a>-->
 <a href="{% url 'basket:view' %}" class="basket">
   <span>
