@@ -5,10 +5,6 @@ from basketapp.models import Basket
 import random
 
 
-def get_basket(user):
-    if user.is_authenticated:
-        return Basket.objects.filter(user=user)
-    return None
 
 
 def get_hot_product():
@@ -28,7 +24,6 @@ def index(request):
     content = {
         'title': title,
         'products': products,
-        'basket': get_basket(request.user)
     }
 
     return render(request, 'mainapp/index.html',  content)
@@ -37,7 +32,6 @@ def index(request):
 def contact(request):
     context = {
         'title': 'Контакты',
-        'basket': get_basket(request.user)
     }
     return render(request, 'mainapp/contact.html', context)
 
@@ -75,7 +69,6 @@ def products(request, pk=None, page=1):
             'links_menu': links_menu,
             'category': category,
             'products': products_paginator,
-            'basket': basket,
         }
 
         return render(request, 'mainapp/products_list.html', context)
@@ -88,7 +81,6 @@ def products(request, pk=None, page=1):
         'links_menu': links_menu,
         'same_product': same_product,
         'hot_product': hot_product,
-        'basket': get_basket(request.user)
 
     }
     return render(request, 'mainapp/products.html', context)
@@ -100,7 +92,6 @@ def product(request, pk):
         'title': title,
         'links_menu': ProductCategory.objects.all(),
         'product': get_object_or_404(Product, pk=pk),
-        'basket': get_basket(request.user)
     }
 
     return render(request, 'mainapp/product.html', context)

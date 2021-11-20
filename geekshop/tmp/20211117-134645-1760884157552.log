@@ -1,0 +1,11 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Account activation
+From: webmaster@localhost
+To: django7@gb.com
+Date: Wed, 17 Nov 2021 10:46:45 -0000
+Message-ID: <163714600532.4992.11579687334347076730@LAPTOP-T5JA88T8>
+
+Your activation url: http://localhost:8000//auth/verify/django7@gb.com/7c4f8928862efb96f7e9e08334472167dd6d62c2/
+-------------------------------------------------------------------------------
