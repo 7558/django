@@ -3,9 +3,8 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from datetime import datetime, timedelta
-from django.core.management import BaseCommand
 
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
@@ -13,7 +12,7 @@ from django.dispatch import receiver
 class ShopUser(AbstractUser):
     avatar = models.ImageField(upload_to='users_avatars', blank=True, verbose_name='Аватар')
     age = models.PositiveSmallIntegerField(verbose_name='Возраст', default=18)
-
+    avatar_url = models.CharField(max_length=128, blank=True, null=True)
     activate_key = models.CharField(max_length=128, verbose_name='Ключ активации', blank=True, null=True)
     activate_key_expired = models.DateTimeField(blank=True, null=True)
 

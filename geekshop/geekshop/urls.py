@@ -23,6 +23,7 @@ from django.conf.urls import include
 urlpatterns = [
     path('', mainapp.index, name='index'),
     path('', include('social_django.urls', namespace='social')),
+    path('order/', include('ordersapp.urls', namespace='order')),
     path('contact/', mainapp.contact, name='contact'),
     path('products/', include('mainapp.urls', namespace='products')),
     path('auth/', include('authapp.urls', namespace='auth')),
