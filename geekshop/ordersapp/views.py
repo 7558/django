@@ -1,7 +1,8 @@
 from django.db import transaction
+from django.db.models.signals import pre_save, pre_delete
+from django.dispatch import receiver
 from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
@@ -14,7 +15,7 @@ class OrderListView(ListView):
     model = Order
 
     def get_queryset(self):
-        return Order.objects.filter(user= self.request.user)
+        return super().get_queryset().filter(user=self.request.user)
 
 
 class OrderCreateView(CreateView):
@@ -36,6 +37,7 @@ class OrderCreateView(CreateView):
                 for num, form in enumerate(formset.forms):
                     form.initial['product'] = basket_item[num].product
                     form.initial['quantity'] = basket_item[num].quantity
+                    form.initial['price'] = basket_item[num].price
             else:
                 formset = OrderFormSet()
         context_data['orderitems'] = formset
@@ -46,6 +48,7 @@ class OrderCreateView(CreateView):
         orderitems = context['orderitems']
 
         with transaction.atomic():
+            Basket.objects.filter(user=self.request.user).delete()
             form.instance.user = self.request.user
             self.object = form.save()
             if orderitems.is_valid():
@@ -71,6 +74,9 @@ class OrderUpdateView(UpdateView):
             formset = OrderFormSet(self.request.POST, instance=self.object)
         else:
             formset = OrderFormSet(instance=self.object)
+            for form in formset.forms:
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
         context_data['orderitems'] = formset
         return context_data
 
@@ -100,8 +106,28 @@ class OrderDetailView(DetailView):
 
 
 def order_forming_complete(request, pk):
+    # basket_item = Basket.objects.filter(user=request.user)
     order = Order.objects.get(pk=pk)
     order.status = Order.STATUS_SEND_TO_PROCEED
     order.save()
+    # basket_item.delete()
 
     return HttpResponseRedirect(reverse('order:list'))
+
+
+@ receiver(pre_save, sender=OrderItem)
+@ receiver(pre_save, sender=Basket)
+def product_quantity_update_save(sender, instance, **kwargs):
+    if instance.pk:
+        instance.product.quantity -= instance.quantity - instance.get_item(instance.pk).quantity
+    else:
+        instance.product.quantity -= instance.quantity
+    instance.product.save()
+
+
+@receiver(pre_delete, sender=OrderItem)
+@receiver(pre_delete, sender=Basket)
+def product_quantity_update_delete(sender, instance, **kwargs):
+    instance.product.quantity += instance.quantity
+    instance.product.save()
+
