@@ -31,6 +31,7 @@ DEBUG = (os.getenv('DEBUG', 'False') == 'True')
 
 ALLOWED_HOSTS = ['*']
 
+ENV_TYPE = os.getenv('ENV_TYPE')
 
 # Application definition
 
@@ -119,19 +120,22 @@ AUTH_USER_MODEL = 'authapp.ShopUser'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'geekshop',
-        'USER': 'postgres',
-    },
-}
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+if ENV_TYPE == 'local':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        },
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'geekshop',
+            'USER': 'postgres',
+        },
+    }
+
 
 
 # Password validation
@@ -171,7 +175,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_URL = '/static/'
 
-ENV_TYPE = os.getenv('ENV_TYPE')
+
 if ENV_TYPE == 'local':
     STATICFILES_DIRS = (
         BASE_DIR / 'static',
