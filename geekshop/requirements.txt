@@ -10,3 +10,4 @@ social-auth-core==4.1.0
 gunicorn
 psycopg2-binary
 django-debug-toolbar
+django-debug-toolbar-template-profiler
